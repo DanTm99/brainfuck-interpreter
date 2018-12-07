@@ -57,9 +57,9 @@ def jumpRight(prog: String, pc: Int, level: Int): Int =
 def jumpLeft(prog: String, pc: Int, level: Int): Int =
   if (pc >= prog.length || pc < 0) pc else
     prog(pc) match {
-      case '[' => jumpLeft(prog, pc + 1, level - 1)
+      case '[' => jumpLeft(prog, pc - 1, level - 1)
       case ']' => jumpLeft(prog, pc - 1, level + 1)
-      case _ => if (level == -1) pc else jumpLeft(prog, pc - 1, level)
+      case _ => if (level == -1) pc + 2 else jumpLeft(prog, pc - 1, level)
     }
 
 
