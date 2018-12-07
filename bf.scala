@@ -15,7 +15,12 @@ type Mem = Map[Int, Int]
 import io.Source
 import scala.util._
 
-//def load_bff(name: String) : String = ...
+def load_bff(name: String): String = {
+  val bufferedSource = Source.fromFile(name)
+  val output = bufferedSource.mkString
+  bufferedSource.close
+  output
+}
 
 
 
