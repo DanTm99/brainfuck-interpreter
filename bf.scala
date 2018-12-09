@@ -86,9 +86,23 @@ def jumpLeft(prog: String, pc: Int, level: Int): Int =
 // counter and memory counter set to 0.
 
 
-//def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = ...
+def compute(prog: String, pc: Int, mp: Int, mem: Mem): Mem =
+  if (pc >= prog.length || pc < 0) mem else
+    prog(pc) match {
+      case '>' => compute(prog, pc + 1, mp + 1, mem)
+      case '<' => compute(prog, pc + 1, mp - 1, mem)
+      case '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+      case '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+      case '.' =>
+        print(sread(mem, mp).toChar)
+        compute(prog, pc + 1, mp, mem)
+      case ',' => compute(prog, pc + 1, mp, write(mem, mp, Console.in.read().toByte))
+      case '[' if sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
+      case ']' if sread(mem, mp) != 0 => compute(prog, jumpLeft(prog, pc - 1, 0), mp, mem)
+      case _ => compute(prog, pc + 1, mp, mem)
+    }
 
-//def run(prog: String, m: Mem = Map()) = ...
+def run(prog: String, m: Mem = Map()) = compute(prog, 0, 0, m)
 
 
 /*
