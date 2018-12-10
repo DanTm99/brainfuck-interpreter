@@ -21,22 +21,50 @@ import scala.util._
 
 // !! COPY from your bf.scala !!
 
-// def load_bff(name: String) : String = ...
-  
-// def sread(mem: Mem, mp: Int) : Int = ...
+def load_bff(name: String): String = Try(Source.fromFile(name).mkString).getOrElse("")
 
-// def write(mem: Mem, mp: Int, v: Int) : Mem = ...
+def sread(mem: Mem, mp: Int): Int = mem.getOrElse(mp, 0)
 
-// def jumpRight(prog: String, pc: Int, level: Int) : Int = ...
+def write(mem: Mem, mp: Int, v: Int): Mem = mem + (mp -> v)
 
-// def jumpLeft(prog: String, pc: Int, level: Int) : Int = ...
+def jumpRight(prog: String, pc: Int, level: Int): Int =
+  if (level == -1) pc
+  else if (pc >= prog.length || pc <= 0) pc else
+    prog(pc) match {
+      case '[' => jumpRight(prog, pc + 1, level + 1)
+      case ']' => jumpRight(prog, pc + 1, level - 1)
+      case _ => jumpRight(prog, pc + 1, level)
+    }
 
-// def compute(prog: String, pc: Int, mp: Int, mem: Mem) : Mem = ...
+def jumpLeft(prog: String, pc: Int, level: Int): Int =
+  if (level == -1) pc + 2
+  else if (pc >= prog.length || pc < 0) pc else
+    prog(pc) match {
+      case '[' => jumpLeft(prog, pc - 1, level - 1)
+      case ']' => jumpLeft(prog, pc - 1, level + 1)
+      case _ => jumpLeft(prog, pc - 1, level)
+    }
 
-// def run(prog: String, m: Mem = Map()) = 
+def compute(prog: String, pc: Int, mp: Int, mem: Mem): Mem =
+  if (pc >= prog.length || pc < 0) mem else
+    prog(pc) match {
+      case '>' => compute(prog, pc + 1, mp + 1, mem)
+      case '<' => compute(prog, pc + 1, mp - 1, mem)
+      case '+' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+      case '-' => compute(prog, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+      case '.' =>
+        print(sread(mem, mp).toChar)
+        compute(prog, pc + 1, mp, mem)
+      case ',' => compute(prog, pc + 1, mp, write(mem, mp, Console.in.read().toByte))
+      case '[' if sread(mem, mp) == 0 => compute(prog, jumpRight(prog, pc + 1, 0), mp, mem)
+      case ']' if sread(mem, mp) != 0 => compute(prog, jumpLeft(prog, pc - 1, 0), mp, mem)
+      case _ => compute(prog, pc + 1, mp, mem)
+    }
+
+def run(prog: String, m: Mem = Map()) = compute(prog, 0, 0, m)
 
 // The baseline to what we can compare our "compiler"
-// implemented below. It should require something like 
+// implemented below. It should require something like
 // 60 seconds for the calculation on my laptop
 //
 //time_needed(1, run(load_bff("benchmark.bf")))
@@ -56,34 +84,34 @@ import scala.util._
 //================
 
 // (5) Write a function jtable that precomputes the "jump
-//     table" for a bf-program. This function takes a bf-program 
-//     as an argument and Returns a Map[Int, Int]. The 
+//     table" for a bf-program. This function takes a bf-program
+//     as an argument and Returns a Map[Int, Int]. The
 //     purpose of this map is to record the information
 //     that given on the position pc is a '[' or a ']',
 //     then to which pc-position do we need to jump next?
-// 
+//
 //     For example for the program
-//    
+//
 //       "+++++[->++++++++++<]>--<+++[->>++++++++++<<]>>++<<----------[+>.>.<+<]"
 //
 //     we obtain the map
 //
 //       Map(69 -> 61, 5 -> 20, 60 -> 70, 27 -> 44, 43 -> 28, 19 -> 6)
-//  
+//
 //     This states that for the '[' on position 5, we need to
 //     jump to position 20, which is just after the corresponding ']'.
 //     Similarly, for the ']' on position 19, we need to jump to
 //     position 6, which is just after the '[' on position 5, and so
 //     on. The idea is to not calculate this information each time
-//     we hit a bracket, but just look up this information in the 
+//     we hit a bracket, but just look up this information in the
 //     jtable. You can use the jumpLeft and jumpRight functions
 //     from Part 1 for calculating the jtable.
 //
-//     Then adapt the compute and run functions from Part 1 in order 
-//     to take advantage of the information stored in the jtable. 
+//     Then adapt the compute and run functions from Part 1 in order
+//     to take advantage of the information stored in the jtable.
 //     This means whenever jumpLeft and jumpRight was called previously,
 //     you should look up the jump address in the jtable.
- 
+
 
 //def jtable(pg: String) : Map[Int, Int] = ...
 
