@@ -113,20 +113,38 @@ def run(prog: String, m: Mem = Map()) = compute(prog, 0, 0, m)
 //     you should look up the jump address in the jtable.
 
 
-//def jtable(pg: String) : Map[Int, Int] = ...
+def jtable(pg: String): Map[Int, Int] =
+  (for (i <- 0 until pg.length; if pg(i) == '[' || pg(i) == ']') yield pg(i) match {
+    case '[' => (i, jumpRight(pg, i + 1, 0))
+    case ']' => (i, jumpLeft(pg, i - 1, 0))
+  }).toMap
 
 // testcase
-// jtable("""+++++[->++++++++++<]>--<+++[->>++++++++++<<]>>++<<----------[+>.>.<+<]""")
+//println(jtable("""+++++[->++++++++++<]>--<+++[->>++++++++++<<]>>++<<----------[+>.>.<+<]"""))
 // =>  Map(69 -> 61, 5 -> 20, 60 -> 70, 27 -> 44, 43 -> 28, 19 -> 6)
 
 
-//def compute2(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = ...
+def compute2(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem): Mem =
+  if (pc >= pg.length || pc < 0) mem else
+    pg(pc) match {
+      case '>' => compute2(pg, tb, pc + 1, mp + 1, mem)
+      case '<' => compute2(pg, tb, pc + 1, mp - 1, mem)
+      case '+' => compute2(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+      case '-' => compute2(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+      case '.' =>
+        print(sread(mem, mp).toChar)
+        compute2(pg, tb, pc + 1, mp, mem)
+      case ',' => compute(pg, pc + 1, mp, write(mem, mp, Console.in.read().toByte))
+      case '[' if sread(mem, mp) == 0 => compute2(pg, tb, tb(pc), mp, mem)
+      case ']' if sread(mem, mp) != 0 => compute2(pg, tb, tb(pc), mp, mem)
+      case _ => compute2(pg, tb, pc + 1, mp, mem)
+    }
 
-//def run2(pg: String, m: Mem = Map()) = ... 
+def run2(pg: String, m: Mem = Map()) = compute2(pg, jtable(pg), 0, 0, m)
 
 
 //testcase
-//time_needed(1, run2(load_bff("benchmark.bf")))
+//println(time_needed(1, run2(load_bff("benchmark.bf"))))
 
 
 
