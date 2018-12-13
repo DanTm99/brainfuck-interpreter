@@ -162,19 +162,41 @@ def run2(pg: String, m: Mem = Map()) = compute2(pg, jtable(pg), 0, 0, m)
 // by using the Scala method .replaceAll you can replace it with the 
 // string "0" standing for the new bf-command.
 
-//def optimise(s: String) : String = ...
+def optimise(s: String): String =
+  s.replaceAll("""[^<>+-.,\[\]]""", "")
+    .replaceAll("""\[-\]""", "0")
 
-//def compute3(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = ...
+def compute3(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem): Mem =
+  if (pc >= pg.length || pc < 0) mem else
+    pg(pc) match {
+      case '>' => compute3(pg, tb, pc + 1, mp + 1, mem)
+      case '<' => compute3(pg, tb, pc + 1, mp - 1, mem)
+      case '+' => compute3(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) + 1))
+      case '-' => compute3(pg, tb, pc + 1, mp, write(mem, mp, sread(mem, mp) - 1))
+      case '.' =>
+        print(sread(mem, mp).toChar)
+        compute3(pg, tb, pc + 1, mp, mem)
+      case ',' => compute(pg, pc + 1, mp, write(mem, mp, Console.in.read().toByte))
+      case '[' if sread(mem, mp) == 0 => compute3(pg, tb, tb(pc), mp, mem)
+      case ']' if sread(mem, mp) != 0 => compute3(pg, tb, tb(pc), mp, mem)
+      case '0' => compute3(pg, tb, pc + 1, mp, write(mem, mp, 0))
+      case _ => compute3(pg, tb, pc + 1, mp, mem)
+    }
 
-//def run3(pg: String, m: Mem = Map()) = ...
+// This version is commented out because it's slower
+//def run3(pg: String, m: Mem = Map()) = {
+//  val optimisedProgram = optimise(pg)
+//  compute3(optimisedProgram, jtable(optimisedProgram), 0, 0, m)
+//}
 
+def run3(pg: String, m: Mem = Map()) = compute3(optimise(pg), jtable(optimise(pg)), 0, 0, m)
 
 // testcases
 
-//optimise(load_bff("benchmark.bf"))          // should have inserted 0's
-//optimise(load_bff("mandelbrot.bf")).length  // => 11203
- 
-//time_needed(1, run3(load_bff("benchmark.bf")))
+//println(optimise(load_bff("benchmark.bf")))          // should have inserted 0's
+//println(optimise(load_bff("mandelbrot.bf")).length)  // => 11203
+
+//println(time_needed(1, run3(load_bff("benchmark.bf"))))
 
 
 
