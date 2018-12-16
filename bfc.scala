@@ -134,7 +134,7 @@ def compute2(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem): Mem =
       case '.' =>
         print(sread(mem, mp).toChar)
         compute2(pg, tb, pc + 1, mp, mem)
-      case ',' => compute(pg, pc + 1, mp, write(mem, mp, Console.in.read().toByte))
+      case ',' => compute2(pg, tb, pc + 1, mp, write(mem, mp, Console.in.read().toByte))
       case '[' if sread(mem, mp) == 0 => compute2(pg, tb, tb(pc), mp, mem)
       case ']' if sread(mem, mp) != 0 => compute2(pg, tb, tb(pc), mp, mem)
       case _ => compute2(pg, tb, pc + 1, mp, mem)
@@ -145,7 +145,6 @@ def run2(pg: String, m: Mem = Map()) = compute2(pg, jtable(pg), 0, 0, m)
 
 //testcase
 //println(time_needed(1, run2(load_bff("benchmark.bf"))))
-
 
 
 // (6) Write a function optimise which deletes "dead code" (everything
@@ -176,7 +175,7 @@ def compute3(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem): Mem =
       case '.' =>
         print(sread(mem, mp).toChar)
         compute3(pg, tb, pc + 1, mp, mem)
-      case ',' => compute(pg, pc + 1, mp, write(mem, mp, Console.in.read().toByte))
+      case ',' => compute3(pg, tb, pc + 1, mp, write(mem, mp, Console.in.read().toByte))
       case '[' if sread(mem, mp) == 0 => compute3(pg, tb, tb(pc), mp, mem)
       case ']' if sread(mem, mp) != 0 => compute3(pg, tb, tb(pc), mp, mem)
       case '0' => compute3(pg, tb, pc + 1, mp, write(mem, mp, 0))
