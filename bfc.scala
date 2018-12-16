@@ -221,26 +221,151 @@ def run3(pg: String, m: Mem = Map()) = compute3(optimise(pg), jtable(optimise(pg
 //  appropriately with such two-character commands.
 
 
-//def combine(s: String) : String = ...
+def combine(s: String): String =
+  s.replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%Z""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%Y""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%X""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%W""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%V""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%U""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%T""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%S""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%R""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%Q""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%P""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%O""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%N""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%M""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+""", """%L""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+""", """%K""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+\+""", """%J""")
+    .replaceAll("""\+\+\+\+\+\+\+\+\+""", """%I""")
+    .replaceAll("""\+\+\+\+\+\+\+\+""", """%H""")
+    .replaceAll("""\+\+\+\+\+\+\+""", """%G""")
+    .replaceAll("""\+\+\+\+\+\+""", """%F""")
+    .replaceAll("""\+\+\+\+\+""", """%E""")
+    .replaceAll("""\+\+\+\+""", """%D""")
+    .replaceAll("""\+\+\+""", """%C""")
+    .replaceAll("""\+\+""", """%B""")
+    .replaceAll("""\+""", """%A""")
+    .replaceAll("""--------------------------""", """#Z""")
+    .replaceAll("""-------------------------""", """#Y""")
+    .replaceAll("""------------------------""", """#X""")
+    .replaceAll("""-----------------------""", """#W""")
+    .replaceAll("""----------------------""", """#V""")
+    .replaceAll("""---------------------""", """#U""")
+    .replaceAll("""--------------------""", """#T""")
+    .replaceAll("""-------------------""", """#S""")
+    .replaceAll("""------------------""", """#R""")
+    .replaceAll("""-----------------""", """#Q""")
+    .replaceAll("""----------------""", """#P""")
+    .replaceAll("""---------------""", """#O""")
+    .replaceAll("""--------------""", """#N""")
+    .replaceAll("""-------------""", """#M""")
+    .replaceAll("""------------""", """#L""")
+    .replaceAll("""-----------""", """#K""")
+    .replaceAll("""----------""", """#J""")
+    .replaceAll("""---------""", """#I""")
+    .replaceAll("""--------""", """#H""")
+    .replaceAll("""-------""", """#G""")
+    .replaceAll("""------""", """#F""")
+    .replaceAll("""-----""", """#E""")
+    .replaceAll("""----""", """#D""")
+    .replaceAll("""---""", """#C""")
+    .replaceAll("""--""", """#B""")
+    .replaceAll("""-""", """#A""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>>>>>>>>>>""", """;Z""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>>>>>>>>>""", """;Y""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>>>>>>>>""", """;X""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>>>>>>>""", """;W""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>>>>>>""", """;V""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>>>>>""", """;U""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>>>>""", """;T""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>>>""", """;S""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>>""", """;R""")
+    .replaceAll(""">>>>>>>>>>>>>>>>>""", """;Q""")
+    .replaceAll(""">>>>>>>>>>>>>>>>""", """;P""")
+    .replaceAll(""">>>>>>>>>>>>>>>""", """;O""")
+    .replaceAll(""">>>>>>>>>>>>>>""", """;N""")
+    .replaceAll(""">>>>>>>>>>>>>""", """;M""")
+    .replaceAll(""">>>>>>>>>>>>""", """;L""")
+    .replaceAll(""">>>>>>>>>>>""", """;K""")
+    .replaceAll(""">>>>>>>>>>""", """;J""")
+    .replaceAll(""">>>>>>>>>""", """;I""")
+    .replaceAll(""">>>>>>>>""", """;H""")
+    .replaceAll(""">>>>>>>""", """;G""")
+    .replaceAll(""">>>>>>""", """;F""")
+    .replaceAll(""">>>>>""", """;E""")
+    .replaceAll(""">>>>""", """;D""")
+    .replaceAll(""">>>""", """;C""")
+    .replaceAll(""">>""", """;B""")
+    .replaceAll(""">""", """;A""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<<<<<<<<<<""", """:Z""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<<<<<<<<<""", """:Y""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<<<<<<<<""", """:X""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<<<<<<<""", """:W""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<<<<<<""", """:V""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<<<<<""", """:U""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<<<<""", """:T""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<<<""", """:S""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<<""", """:R""")
+    .replaceAll("""<<<<<<<<<<<<<<<<<""", """:Q""")
+    .replaceAll("""<<<<<<<<<<<<<<<<""", """:P""")
+    .replaceAll("""<<<<<<<<<<<<<<<""", """:O""")
+    .replaceAll("""<<<<<<<<<<<<<<""", """:N""")
+    .replaceAll("""<<<<<<<<<<<<<""", """:M""")
+    .replaceAll("""<<<<<<<<<<<<""", """:L""")
+    .replaceAll("""<<<<<<<<<<<""", """:K""")
+    .replaceAll("""<<<<<<<<<<""", """:J""")
+    .replaceAll("""<<<<<<<<<""", """:I""")
+    .replaceAll("""<<<<<<<<""", """:H""")
+    .replaceAll("""<<<<<<<""", """:G""")
+    .replaceAll("""<<<<<<""", """:F""")
+    .replaceAll("""<<<<<""", """:E""")
+    .replaceAll("""<<<<""", """:D""")
+    .replaceAll("""<<<""", """:C""")
+    .replaceAll("""<<""", """:B""")
+    .replaceAll("""<""", """:A""")
+    .replaceAll("""%""","""+""")
+    .replaceAll("""#""","""-""")
+    .replaceAll(""";""",""">""")
+    .replaceAll(""":""","""<""")
+
 
 
 // testcase
-//combine(load_bff("benchmark.bf"))
+//println(combine(load_bff("benchmark.bf")))
+//println(time_needed(10000, combine(load_bff("benchmark.bf"))))
 
-//def compute4(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem) : Mem = ...
+def compute4(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem): Mem =
+  if (pc >= pg.length || pc < 0) mem else
+    pg(pc) match {
+      case '>' => compute4(pg, tb, pc + 2, mp + (pg(pc + 1).getNumericValue - 9), mem)
+      case '<' => compute4(pg, tb, pc + 2, mp - (pg(pc + 1).getNumericValue - 9), mem)
+      case '+' => compute4(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) + (pg(pc + 1).getNumericValue - 9)))
+      case '-' => compute4(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) - (pg(pc + 1).getNumericValue - 9)))
+      case '.' =>
+        print(sread(mem, mp).toChar)
+        compute4(pg, tb, pc + 1, mp, mem)
+      case ',' => compute4(pg, tb, pc + 1, mp, write(mem, mp, Console.in.read().toByte))
+      case '[' if sread(mem, mp) == 0 => compute4(pg, tb, tb(pc), mp, mem)
+      case ']' if sread(mem, mp) != 0 => compute4(pg, tb, tb(pc), mp, mem)
+      case '0' => compute4(pg, tb, pc + 1, mp, write(mem, mp, 0))
+      case _ => compute4(pg, tb, pc + 1, mp, mem)
+    }
 
 // should call first optimise and then combine on the input string
-//def run4(pg: String, m: Mem = Map()) = ...
+def run4(pg: String, m: Mem = Map()) = {
+  val s = combine(optimise(pg))
+  compute4(s, jtable(s), 0, 0, m)
+}
 
 
 // testcases
-//combine(optimise(load_bff("benchmark.bf"))) // => """>A+B[<A+M>A-A]<A[[....."""
-
-//time_needed(1, run4(load_bff("benchmark.bf")))
-
-//time_needed(1, run(load_bff("sierpinski.bf"))) 
-//time_needed(1, run4(load_bff("sierpinski.bf"))) 
-
-//time_needed(1, run4(load_bff("mandelbrot.bf")))
+//println(combine(optimise(load_bff("benchmark.bf")))) // => """>A+B[<A+M>A-A]<A[[....."""
+//println(time_needed(1, run4(load_bff("benchmark.bf"))))
+//println(time_needed(1, run(load_bff("sierpinski.bf"))))
+//println(time_needed(1, run4(load_bff("sierpinski.bf"))))
+//println(time_needed(1, run4(load_bff("mandelbrot.bf"))))
 
 
