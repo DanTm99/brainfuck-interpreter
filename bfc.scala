@@ -11,12 +11,12 @@ def time_needed[T](n: Int, code: => T) = {
   val start = System.nanoTime()
   for (i <- 0 until n) code
   val end = System.nanoTime()
-  (end - start)/(n * 1.0e9)
+  (end - start) / (n * 1.0e9)
 }
 
 type Mem = Map[Int, Int]
 
-import io.Source
+import scala.io.Source
 import scala.util._
 
 // !! COPY from your bf.scala !!
@@ -200,7 +200,6 @@ def run3(pg: String, m: Mem = Map()) =
 //println(time_needed(1, run3(load_bff("benchmark.bf"))))
 
 
-
 // (7)  Write a function combine which replaces sequences
 // of repeated increment and decrement commands by appropriate
 // two-character commands. For example for sequences of +
@@ -223,9 +222,10 @@ def run3(pg: String, m: Mem = Map()) =
 //  appropriately with such two-character commands.
 
 
-// Replace repeated +, -, >, and < with the appropriate 2 character command.
-// Temporarily use an alternate character (%, #, ;, and : respectively) in the two
-// character commands before replacing the alternate characters with the originals
+/* Replace repeated +, -, >, and < with the appropriate 2 character command.
+   Temporarily use an alternate character (%, #, ;, and : respectively) in the two
+   character commands before replacing the alternate characters with the originals
+*/
 def combine(s: String): String =
   s.replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%Z""")
     .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%Y""")
