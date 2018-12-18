@@ -140,7 +140,8 @@ def compute2(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem): Mem =
       case _ => compute2(pg, tb, pc + 1, mp, mem)
     }
 
-def run2(pg: String, m: Mem = Map()) = compute2(pg, jtable(pg), 0, 0, m)
+def run2(pg: String, m: Mem = Map()) =
+  compute2(pg, jtable(pg), 0, 0, m)
 
 
 //testcase
@@ -188,7 +189,8 @@ def compute3(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem): Mem =
 //  compute3(optimisedProgram, jtable(optimisedProgram), 0, 0, m)
 //}
 
-def run3(pg: String, m: Mem = Map()) = compute3(optimise(pg), jtable(optimise(pg)), 0, 0, m)
+def run3(pg: String, m: Mem = Map()) =
+  compute3(optimise(pg), jtable(optimise(pg)), 0, 0, m)
 
 // testcases
 
@@ -221,6 +223,9 @@ def run3(pg: String, m: Mem = Map()) = compute3(optimise(pg), jtable(optimise(pg
 //  appropriately with such two-character commands.
 
 
+// Replace repeated +, -, >, and < with the appropriate 2 character command.
+// Temporarily use an alternate character (%, #, ;, and : respectively) in the two
+// character commands before replacing the alternate characters with the originals
 def combine(s: String): String =
   s.replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%Z""")
     .replaceAll("""\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+\+""", """%Y""")
@@ -355,11 +360,15 @@ def compute4(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem): Mem =
     }
 
 // should call first optimise and then combine on the input string
-def run4(pg: String, m: Mem = Map()) = {
-  val s = combine(optimise(pg))
-  compute4(s, jtable(s), 0, 0, m)
-}
 
+// This version is commented out because it's slower
+//def run4Old(pg: String, m: Mem = Map()) = {
+//  val s = combine(optimise(pg))
+//  compute4(s, jtable(s), 0, 0, m)
+//}
+
+def run4(pg: String, m: Mem = Map()) =
+  compute4(combine(optimise(pg)), jtable(combine(optimise(pg))), 0, 0, m)
 
 // testcases
 //println(combine(optimise(load_bff("benchmark.bf")))) // => """>A+B[<A+M>A-A]<A[[....."""
