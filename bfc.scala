@@ -345,10 +345,10 @@ def combine(s: String): String =
 def compute4(pg: String, tb: Map[Int, Int], pc: Int, mp: Int, mem: Mem): Mem =
   if (pc >= pg.length || pc < 0) mem else
     pg(pc) match {
-      case '>' => compute4(pg, tb, pc + 2, mp + (pg(pc + 1).getNumericValue - 9), mem)
-      case '<' => compute4(pg, tb, pc + 2, mp - (pg(pc + 1).getNumericValue - 9), mem)
-      case '+' => compute4(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) + (pg(pc + 1).getNumericValue - 9)))
-      case '-' => compute4(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) - (pg(pc + 1).getNumericValue - 9)))
+      case '>' => compute4(pg, tb, pc + 2, mp + (pg(pc + 1).toInt - 64), mem)
+      case '<' => compute4(pg, tb, pc + 2, mp - (pg(pc + 1).toInt - 64), mem)
+      case '+' => compute4(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) + (pg(pc + 1).toInt - 64)))
+      case '-' => compute4(pg, tb, pc + 2, mp, write(mem, mp, sread(mem, mp) - (pg(pc + 1).toInt - 64)))
       case '.' =>
         print(sread(mem, mp).toChar)
         compute4(pg, tb, pc + 1, mp, mem)
